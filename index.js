@@ -44,7 +44,7 @@ const Dates = mongoose.model("Dates", datesSchema, "dates");
 
 app.get("/", async (req, res) => {
 	const dates = await Dates.find();
-	// dates.reverse();
+	dates.reverse();
 	res.json(dates);
 });
 
@@ -60,15 +60,21 @@ app.get("/increase", (req, res) => {
 	res.render("layout.pug");
 });
 
-app.get("/star/increase", async (req, res) => {
-	increaseStar();
-	res.redirect("/");
+app.get("/:date", async (req, res) => {
+	const date = req.params.date;
+	const thisDate = await Dates.findOne({ date: date });
+	res.json(thisDate);
 });
 
-app.post("/star/increase", async (req, res) => {
-	increaseStar();
-	res.redirect("/");
-});
+// app.get("/star/increase", async (req, res) => {
+// 	increaseStar();
+// 	res.redirect("/");
+// });
+
+// app.post("/star/increase", async (req, res) => {
+// 	increaseStar();
+// 	res.redirect("/");
+// });
 
 http.listen(port, () =>
 	console.log(`Example app listening at http://localhost:${port}`)
