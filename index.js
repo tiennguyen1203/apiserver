@@ -7,7 +7,21 @@ var cors = require("cors");
 app.use(cors());
 var http = require("http").createServer(app);
 var io = require("socket.io")(http);
+const mysql = require("mysql");
+const connection = mysql.createConnection({
+	host: "localhost",
+	user: "root",
+	password: "",
+	database: "test",
+});
 
+connection.connect();
+const sql = `INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country)
+	VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway')`;
+connection.query(sql, function (err, result) {
+	if (err) throw err;
+	console.log("created...", result);
+});
 app.set("view engine", "pug");
 app.set("views", "./views");
 //fix lỗi CORS
